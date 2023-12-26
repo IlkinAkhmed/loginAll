@@ -6,7 +6,7 @@ import { setCookie } from "../../../helpers/helper";
 import { userContext } from "../../context/usercontext";
 
 function SignUp() {
-  const {token, setUser,setToken } = useContext(userContext);
+  const { token, setUser, setToken } = useContext(userContext);
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -35,8 +35,14 @@ function SignUp() {
   }
   return (
     <>
+      <i
+        className="fa-solid fa-arrow-left"
+        style={{ cursor: "pointer", color: "blue", margin: "20px", fontSize: "20px" }}
+        onClick={() => navigate("/")}
+      >
+
+      </i>
       <h1>Sign Up</h1>
-      <Link to={"/"}>Back</Link>
       <form action="" onSubmit={handleSubmit}>
         <label htmlFor="">
           <b>UserName: </b>

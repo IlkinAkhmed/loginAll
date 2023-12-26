@@ -1,14 +1,13 @@
-import React, { useContext, useEffect, useState } from "react";
-import { userContext } from "../../context/usercontext";
-import { useNavigate } from "react-router";
-import User from "../UserPage/User";
-import { Link } from "react-router-dom";
 import axios from "axios";
-import { setCookie } from "../../../helpers/helper";
 import { jwtDecode } from "jwt-decode";
+import React, { useContext, useState } from "react";
+import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
+import { setCookie } from "../../../helpers/helper";
+import { userContext } from "../../context/usercontext";
 
 function Login() {
-  const {token, setUser,setToken } = useContext(userContext);
+  const { token, setUser, setToken } = useContext(userContext);
   const navigate = useNavigate();
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
@@ -24,7 +23,7 @@ function Login() {
     setUser(decoded)
     setToken(token)
     navigate("/user");
-    setCookie('token',token,'300s')
+    setCookie('token', token, '1h')
   }
   function handleChange(e, handleChanger) {
     e.preventDefault();
@@ -32,8 +31,14 @@ function Login() {
   }
   return (
     <>
+      <i
+        className="fa-solid fa-arrow-left"
+        style={{ cursor: "pointer", color: "blue", margin: "20px", fontSize: "20px" }}
+        onClick={() => navigate("/")}
+      >
+
+      </i>
       <h1>Log In</h1>
-      <Link to={"/"}>Back</Link>
       <form action="" onSubmit={handleSubmit}>
         <label htmlFor="">
           <b>UserName: </b>

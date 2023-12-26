@@ -60,6 +60,7 @@ app.post("/register", async (req, res) => {
 
 // --------------------------LOGIN--------------------------------------------
 
+
 app.post("/login", async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -67,16 +68,18 @@ app.post("/login", async (req, res) => {
     if (user && bcrypt.compare(password, user.password)) {
       const token = jwt.sign(
         { username: user.username, role: user.role },
-        PrivateKey
+        PrivateKey,
+        { expiresIn: '1h' }
       );
       res.status(200).send(token);
     } else {
-      res.status(403).send("wrong details!!!");
+      res.status(403).send("Wrong details!!!");
     }
   } catch (error) {
     res.status(500).send("Internal Server Error");
   }
 });
+
 
 // --------------------------DELETE--------------------------------------------
 

@@ -20,13 +20,13 @@ function App() {
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/user" element={<User />} />
           </Route>
+          <Route element={<PrivateRoute check={["admin"]} />}>
+            <Route path="/admin" element={<Admin />} />
+          </Route>
+          <Route path="/users" element={<AllUsers />} />
         </Route>
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
-        <Route element={<PrivateRoute check={["admin"]} />}>
-          <Route path="/admin" element={<Admin />} />
-        </Route>
-        <Route path="/users" element={<AllUsers/>} />
       </Routes>
     </>
   );
