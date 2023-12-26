@@ -1,6 +1,8 @@
 import { Route, Routes } from "react-router";
 import "./App.css";
 import MainLayout from "./Layouts/mainLayout";
+import Admin from "./pages/AdminPage";
+import AllUsers from "./pages/AllUsers";
 import ContactPage from "./pages/ContactPage/ContactPage";
 import Home from "./pages/homePage/home";
 import Login from "./pages/LoginPage/login";
@@ -14,13 +16,17 @@ function App() {
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route element={<PrivateRoute />}>
+          <Route element={<PrivateRoute check={["user", "admin"]} />}>
+            <Route path="/contact" element={<ContactPage />} />
             <Route path="/user" element={<User />} />
           </Route>
         </Route>
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
+        <Route element={<PrivateRoute check={["admin"]} />}>
+          <Route path="/admin" element={<Admin />} />
+        </Route>
+        <Route path="/users" element={<AllUsers/>} />
       </Routes>
     </>
   );

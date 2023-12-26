@@ -5,9 +5,10 @@ import User from "../UserPage/User";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { setCookie } from "../../../helpers/helper";
+import { jwtDecode } from "jwt-decode";
 
 function Login() {
-  const { setToken } = useContext(userContext);
+  const {token, setUser,setToken } = useContext(userContext);
   const navigate = useNavigate();
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
@@ -16,12 +17,14 @@ function Login() {
     e.preventDefault();
     const res = await axios.post("http://localhost:8000/login/", {
       username: userName,
-      password: password
+      password: password,
     });
-    setToken(res.data);
-    setCookie("token", res.data, "300s");
-
+    const token = res.data;
+    const decoded = jwtDecode(token);
+    setUser(decoded)
+    setToken(token)
     navigate("/user");
+    setCookie('token',token,'300s')
   }
   function handleChange(e, handleChanger) {
     e.preventDefault();

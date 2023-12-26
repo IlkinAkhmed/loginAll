@@ -5,25 +5,16 @@ import { useNavigate } from "react-router";
 export const userContext = createContext();
 
 function UserProvider({ children }) {
-  const navigate = useNavigate();
-  const [token, setToken] = useState('');
-  const [userName, setUserName] = useState("");
-  const [password, setPassword] = useState("")
-
-  async function handleSubmit(e) {
-    e.preventDefault();
-    const res = await axios.post("http://localhost:8000/register/", {
-      username: userName,
-      password: password
-    });
-    setToken(res.data);
-    navigate("/user");
-  }
+  const [token, setToken] = useState(null);
+  const [user, setUser] = useState(
+    localStorage.getItem("user")
+      ? JSON.parse(localStorage.getItem("user"))
+      : null
+  );
+  localStorage.setItem("user", JSON.stringify(user));
 
   return (
-    <userContext.Provider
-      value={{ token, setToken, setUserName, setPassword, handleSubmit }}
-    >
+    <userContext.Provider value={{ token, setToken, user, setUser }}>
       {children}
     </userContext.Provider>
   );

@@ -1,7 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const session = require("express-session");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -11,13 +10,7 @@ app.use(express.json());
 const port = 8000;
 const PrivateKey = "wexvlj@!@#$!__++=";
 
-app.use(
-  session({
-    secret: "sdogj@#!##__45",
-    resave: false,
-    saveUninitialized: true,
-  })
-);
+
 
 const { Schema } = mongoose;
 
@@ -72,7 +65,6 @@ app.post("/login", async (req, res) => {
     const { username, password } = req.body;
     const user = await Users.findOne({ username: username });
     if (user && bcrypt.compare(password, user.password)) {
-      req.session.userId = user._id;
       const token = jwt.sign(
         { username: user.username, role: user.role },
         PrivateKey

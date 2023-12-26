@@ -1,8 +1,8 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import "./index.scss";
 import { NavLink } from "react-router-dom";
-import Home from "./../../pages/homePage/home";
 import { userContext } from "../../context/usercontext";
+import FontAwesome from "react-fontawesome";
 
 function Navbar() {
   const { user } = useContext(userContext);
@@ -17,10 +17,27 @@ function Navbar() {
           Contact
         </NavLink>
 
-        <NavLink className={"navLink"} to={"/user"}>
-          Profile
-        </NavLink>
-        
+        {user?.role === "admin" ? (
+          <NavLink className={"navLink"} to={"/admin"}>
+            AdminPage{" "}
+          </NavLink>
+        ) : (
+          ""
+        )}
+        {user ? (
+          <NavLink className={"navLink"} to={"/user"}>
+            <i className="fa-solid fa-user"></i> : {user.username}
+          </NavLink>
+        ) : (
+          <>
+            <NavLink className={"navLink"} to={"/login"}>
+              login
+            </NavLink>
+            <NavLink className={"navLink"} to={"/signup"}>
+              signup
+            </NavLink>{" "}
+          </>
+        )}
       </ul>
     </nav>
   );

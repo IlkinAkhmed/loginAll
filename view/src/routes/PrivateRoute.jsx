@@ -1,12 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { Navigate, Outlet } from 'react-router'
-import { userContext } from '../context/usercontext'
+import React, { useContext, useEffect, useState } from "react";
+import { Navigate, Outlet } from "react-router";
+import { userContext } from "../context/usercontext";
 
-function PrivateRoute() {
-  const { token } = useContext(userContext)
-  return (
-    token ? <Outlet /> : <Navigate to={'/login'} />
-  )
+function PrivateRoute({check}) {
+  const { user } = useContext(userContext);
+ 
+  return check.includes(user?.role) &&  user ? <Outlet /> : <Navigate to={"/login"} />;
 }
 
-export default PrivateRoute
+export default PrivateRoute;
