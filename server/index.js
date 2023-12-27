@@ -10,8 +10,6 @@ app.use(express.json());
 const port = 8000;
 const PrivateKey = "wexvlj@!@#$!__++=";
 
-
-
 const { Schema } = mongoose;
 
 const userSchema = new Schema(
@@ -60,16 +58,15 @@ app.post("/register", async (req, res) => {
 
 // --------------------------LOGIN--------------------------------------------
 
-
 app.post("/login", async (req, res) => {
   try {
     const { username, password } = req.body;
     const user = await Users.findOne({ username: username });
-    if (user && bcrypt.compare(password, user.password)) {
+    if (user && (await bcrypt.compare(password, user.password))) {
       const token = jwt.sign(
         { username: user.username, role: user.role },
         PrivateKey,
-        { expiresIn: '1h' }
+        { expiresIn: "1h" }
       );
       res.status(200).send(token);
     } else {
@@ -79,7 +76,6 @@ app.post("/login", async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
-
 
 // --------------------------DELETE--------------------------------------------
 
@@ -105,6 +101,30 @@ app.delete("/users/:id", async (req, res) => {
     }
   } catch (error) {
     res.status(500).send("Internal Server Error");
+  }
+});
+
+// --------------------------UPDATE USER--------------------------------------------
+
+app.put("/users/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const token = req.headers.authorization;
+    const decoded = jwt.verify(token, PrivateKey);
+    const user = await Users.findOne({ _id: id });
+    if (decoded.role === "admin" || user._id === id) {
+      const hashedPassword = await bcrypt.hash(req.body.password, 10);
+      await Users.findByIdAndUpdate(id, {
+        username: req.body.username,
+        role: user.role,
+        password: hashedPassword,
+      });
+      res.status(200).send("user updated");
+    } else {
+      res.status(404).send("You have not access to update");
+    }
+  } catch (error) {
+    res.status(500).send(error.message);
   }
 });
 
