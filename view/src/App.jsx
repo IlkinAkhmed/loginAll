@@ -23,7 +23,7 @@ function App() {
           <Route element={<PrivateRoute check={["admin"]} />}>
             <Route path="/admin" element={<Admin />} />
           </Route>
-          <Route path="/users" element={<AllUsers />} />
+          <Route path="/admin/users" element={<AllUsers />} />
         </Route>
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/login" element={<Login />} />

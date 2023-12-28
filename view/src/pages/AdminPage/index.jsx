@@ -25,7 +25,7 @@ function Admin() {
         <h2>Name: {user.username}</h2>
         <h4>Role: {user.role}</h4>
         <button onClick={handleLogOut}>Log Out</button><br />
-        <button onClick={() => navigate("/users")}>view all users</button>
+        <button onClick={() => navigate("/admin/users")}>view all users</button>
       </div>
     </div>
   );

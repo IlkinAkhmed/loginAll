@@ -1,7 +1,4 @@
-import React, { createContext, useEffect, useState } from "react";
-
-import axios from "axios";
-import { useNavigate } from "react-router";
+import React, { createContext, useState } from "react";
 export const userContext = createContext();
 
 function UserProvider({ children }) {

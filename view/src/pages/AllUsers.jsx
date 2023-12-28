@@ -28,7 +28,7 @@ function AllUsers() {
   }, []);
 
   // Delete function
-  const hadleDelete = async (id) => {
+  const handleDelete = async (id) => {
     try {
       const token = getCookie("token");
 
@@ -46,7 +46,12 @@ function AllUsers() {
   };
 
   // Update user
-  async function hadleUpdate(id) {
+  async function handleUpdate(e, id) {
+    e.preventDefault()
+    if (!editUsername || !editPassword) {
+      alert("username or password cannot be empty character")
+      return
+    }
     try {
       const token = getCookie("token");
       await axios.put(
@@ -61,6 +66,9 @@ function AllUsers() {
           },
         }
       );
+      fetchUsers()
+      setEditPassword('')
+      setEditUsername('')
       setEditUserId(id === editUserId ? null : id);
       setIsFormOpen(!isFormOpen);
     } catch (error) {
@@ -68,13 +76,9 @@ function AllUsers() {
     }
   }
 
-  function hanleEditChange(e, handleChanger) {
+  function handleInputChange(e, setState) {
     e.preventDefault();
-    if (e.target.value !== 0) {
-      handleChanger(e.target.value);
-    } else {
-      alert("imput must not be empty");
-    }
+    setState(e.target.value);
   }
   return (
     <div
@@ -111,70 +115,77 @@ function AllUsers() {
           placeholder="Search By Name..."
           style={{ height: "30px" }}
         />
-        {users &&
-          users
-            .filter((user) =>
-              user.username
-                .toLowerCase()
-                .trim()
-                .includes(input.toLowerCase().trim())
-            )
-            .filter((user) => user.role !== "admin")
-            .map((user) => (
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  padding: "10px 0",
-                }}
+        {(users ||
+          [])
+          .filter((user) =>
+            user.username
+              .toLowerCase()
+              .trim()
+              .includes(input.toLowerCase().trim())
+          )
+          .filter((user) => user.role !== "admin")
+          .map((user) => (
+            <div key={user._id}
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                padding: "10px 0",
+              }}
+            >
+              <form
+                onSubmit={(e) => handleUpdate(e, user._id)}
+                className={
+                  editUserId === user._id ? "editForm active" : "editForm"
+                }
+                action=""
               >
-                <form
-                  onSubmit={hadleUpdate}
-                  className={
-                    editUserId === user._id ? "editForm active" : "editForm"
-                  }
-                  action=""
-                >
-                  <label htmlFor="">Username</label>
-                  <br />
-                  <input
-                    onChange={(e) => hanleEditChange(e, setEditUsername)}
-                    type="text"
-                  />
-                  <br />
-                  <label htmlFor="">Password</label>
-                  <br />
-                  <input
-                    onChange={(e) => hanleEditChange(e, setEditPassword)}
-                    type="password"
-                  />
-                  <br />
-                  <button onClick={() => hadleUpdate(user._id)} type="submit">
-                    Save
-                  </button>
-                </form>
-                <div>
-                  {" "}
-                  <h2>Name: {user.username}</h2>
-                  <h4>UserId: {user._id}</h4>
-                  <h4>Role: {user.role}</h4>
-                  <h4>Created At: {user.createdAt}</h4>
-                  <hr />
-                </div>
-                <div>
-                  <button
-                    style={{ marginRight: "10px" }}
-                    onClick={() => hadleDelete(user._id)}
-                  >
-                    delete
-                  </button>
-                  <button onClick={() => hadleUpdate(user._id)}>Edit</button>
-                </div>
+                <i
+                  onClick={() => setIsFormOpen(!isFormOpen)}
+                  className="fa-solid fa-xmark"
+                ></i>
+                <label htmlFor="">Username</label>
+                <br />
+                <input
+                  value={editUsername}
+                  onChange={(e) => handleInputChange(e, setEditUsername)}
+                  type="text"
+                />
+                <br />
+                <label htmlFor="">Password</label>
+                <br />
+                <input
+                  value={editPassword}
+                  onChange={(e) => handleInputChange(e, setEditPassword)}
+                  type="password"
+                />
+                <br />
+                <input type="submit" />
+              </form>
+              <div>
+                {" "}
+                <h2>Name: {user.username}</h2>
+                <h4>UserId: {user._id}</h4>
+                <h4>Role: {user.role}</h4>
+                <h4>Created At: {user.createdAt}</h4>
+                <hr />
               </div>
-            ))}
+              <div>
+                <button
+                  style={{ marginRight: "10px" }}
+                  onClick={() => handleDelete(user._id)}
+                >
+                  delete
+                </button>
+                <button onClick={() => {
+                  setEditUserId(user._id === editUserId ? null : user._id);
+                  setIsFormOpen(!isFormOpen);
+                }}>Edit</button>
+              </div>
+            </div>
+          ))}
       </div>
-    </div>
+    </div >
   );
 }
 

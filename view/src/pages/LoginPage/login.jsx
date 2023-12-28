@@ -14,6 +14,10 @@ function Login() {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    if (userName.length === 0 || password.length === 0) {
+      alert('imput must not be empty')
+      return
+    }
     const res = await axios.post("http://localhost:8000/login/", {
       username: userName,
       password: password,
@@ -22,8 +26,9 @@ function Login() {
     const decoded = jwtDecode(token);
     setUser(decoded)
     setToken(token)
+
     navigate("/user");
-    setCookie('token', token, '1h')
+    setCookie('token', token)
   }
   function handleChange(e, handleChanger) {
     e.preventDefault();

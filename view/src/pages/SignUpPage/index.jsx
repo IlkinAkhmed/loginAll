@@ -13,15 +13,16 @@ function SignUp() {
 
   function handleChange(e, handleChanger) {
     e.preventDefault();
-    if (e.target.value !== 0) {
-      handleChanger(e.target.value);
-    } else {
-      alert("imput must not be empty");
-    }
+    handleChanger(e.target.value);
+
   }
 
   async function handleSubmit(e) {
     e.preventDefault();
+    if (userName.length === 0 || password.length === 0) {
+      alert('imput must not be empty')
+      return
+    }
     const res = await axios.post("http://localhost:8000/register/", {
       username: userName,
       password: password,

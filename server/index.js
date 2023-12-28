@@ -46,7 +46,7 @@ app.post("/register", async (req, res) => {
       });
       await user.save();
       const token = jwt.sign(
-        { username: user.username, role: user.role },
+        { _id: user._id, username: user.username, role: user.role },
         PrivateKey
       );
       res.status(200).send(token);
@@ -64,9 +64,8 @@ app.post("/login", async (req, res) => {
     const user = await Users.findOne({ username: username });
     if (user && (await bcrypt.compare(password, user.password))) {
       const token = jwt.sign(
-        { username: user.username, role: user.role },
-        PrivateKey,
-        { expiresIn: "1h" }
+        { _id: user._id, username: user.username, role: user.role },
+        PrivateKey
       );
       res.status(200).send(token);
     } else {
@@ -112,7 +111,7 @@ app.put("/users/:id", async (req, res) => {
     const token = req.headers.authorization;
     const decoded = jwt.verify(token, PrivateKey);
     const user = await Users.findOne({ _id: id });
-    if (decoded.role === "admin" || user._id === id) {
+    if (decoded.role === "admin" || decoded._id === id) {
       const hashedPassword = await bcrypt.hash(req.body.password, 10);
       await Users.findByIdAndUpdate(id, {
         username: req.body.username,
@@ -134,6 +133,21 @@ app.get("/users", async (req, res) => {
   try {
     const users = await Users.find({});
     res.send(users);
+  } catch (error) {
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+
+
+
+// --------------------------GET  USER ById--------------------------------------------
+
+app.get("/users/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await Users.findById(id);
+    res.send(user);
   } catch (error) {
     res.status(500).send("Internal Server Error");
   }

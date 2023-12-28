@@ -9,6 +9,13 @@
     transition: 0.3s;
     color: black;
     text-align: center;
+    .fa-xmark{
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        cursor: pointer;
+        font-size: 18px;
+    }
     input{
         height: 30px;
         border-radius: 8px;
