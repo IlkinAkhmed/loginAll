@@ -17,17 +17,15 @@ function Navbar() {
           Contact
         </NavLink>
 
-        {user?.role === "admin" ? (
-          <NavLink className={"navLink"} to={"/admin"}>
-            AdminPage{" "}
-          </NavLink>
-        ) : (
-          ""
-        )}
         {user ? (
-          <NavLink className={"navLink"} to={"/user"}>
-            <i className="fa-solid fa-user"></i> : {user.username}
-          </NavLink>
+          <>
+            <NavLink className={"navLink"} to={"/news"}>
+              News
+            </NavLink>
+            <NavLink className={"navLink"} to={"/user"}>
+              <i className="fa-solid fa-user"></i> : {user.username}
+            </NavLink>
+          </>
         ) : (
           <>
             <NavLink className={"navLink"} to={"/login"}>
@@ -37,6 +35,13 @@ function Navbar() {
               signup
             </NavLink>{" "}
           </>
+        )}
+        {user?.role === "admin" ? (
+          <NavLink className={"navLink"} to={"/admin"}>
+            AdminPage{" "}
+          </NavLink>
+        ) : (
+          ""
         )}
       </ul>
     </nav>

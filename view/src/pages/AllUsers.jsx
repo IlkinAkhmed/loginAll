@@ -47,10 +47,10 @@ function AllUsers() {
 
   // Update user
   async function handleUpdate(e, id) {
-    e.preventDefault()
+    e.preventDefault();
     if (!editUsername || !editPassword) {
-      alert("username or password cannot be empty character")
-      return
+      alert("username or password cannot be empty character");
+      return;
     }
     try {
       const token = getCookie("token");
@@ -66,9 +66,9 @@ function AllUsers() {
           },
         }
       );
-      fetchUsers()
-      setEditPassword('')
-      setEditUsername('')
+      fetchUsers();
+      setEditPassword("");
+      setEditUsername("");
       setEditUserId(id === editUserId ? null : id);
       setIsFormOpen(!isFormOpen);
     } catch (error) {
@@ -115,8 +115,7 @@ function AllUsers() {
           placeholder="Search By Name..."
           style={{ height: "30px" }}
         />
-        {(users ||
-          [])
+        {(users || [])
           .filter((user) =>
             user.username
               .toLowerCase()
@@ -125,7 +124,8 @@ function AllUsers() {
           )
           .filter((user) => user.role !== "admin")
           .map((user) => (
-            <div key={user._id}
+            <div
+              key={user._id}
               style={{
                 display: "flex",
                 justifyContent: "space-between",
@@ -141,7 +141,10 @@ function AllUsers() {
                 action=""
               >
                 <i
-                  onClick={() => setIsFormOpen(!isFormOpen)}
+                  onClick={() => {
+                    setEditUserId(user._id === editUserId ? null : user._id),
+                    setIsFormOpen(!isFormOpen);
+                  }}
                   className="fa-solid fa-xmark"
                 ></i>
                 <label htmlFor="">Username</label>
@@ -177,15 +180,19 @@ function AllUsers() {
                 >
                   delete
                 </button>
-                <button onClick={() => {
-                  setEditUserId(user._id === editUserId ? null : user._id);
-                  setIsFormOpen(!isFormOpen);
-                }}>Edit</button>
+                <button
+                  onClick={() => {
+                    setEditUserId(user._id === editUserId ? null : user._id);
+                    setIsFormOpen(!isFormOpen);
+                  }}
+                >
+                  Edit
+                </button>
               </div>
             </div>
           ))}
       </div>
-    </div >
+    </div>
   );
 }
 
