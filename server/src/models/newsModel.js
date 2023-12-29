@@ -7,6 +7,7 @@ const newsSchema = new Schema(
     image: { type: String, required: true },
     description: { type: String, required: true },
     author: { type: String, required: true },
+    header: { type: String, required: true },
   },
   { timestamps: true }
 );

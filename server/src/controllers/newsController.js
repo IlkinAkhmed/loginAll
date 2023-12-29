@@ -1,4 +1,9 @@
 import { News } from "../models/newsModel.js";
+import jwt from "jsonwebtoken"
+const PrivateKey = 'wexvlj@!@#$!__++='
+
+
+// --------------------------ADD NEWS--------------------------------------------
 
 export const postNews = async (req, res) => {
   try {
@@ -17,28 +22,50 @@ export const postNews = async (req, res) => {
 // --------------------------DELETE--------------------------------------------
 
 export async function deleteNews(req, res) {
-    try {
-      const token = req.headers.authorization;
-      const decoded = jwt.verify(token, PrivateKey);
-      if (decoded) {
-        if (decoded.role === "admin") {
-          const { id } = req.params;
-          const news = await News.findByIdAndDelete(id);
-          if (news) {
-            res.status(200).send("news Deleted");
-          } else {
-            res.status(404).send("news Not Found");
-          }
-        } else {
-          res.status(403).send("You have not acces to delete news");
-        }
+  try {
+    const token = req.headers.authorization;
+    const decoded = jwt.verify(token, PrivateKey);
+    if (decoded && decoded.role === "admin") {
+      const { id } = req.params;
+      const news = await News.findByIdAndDelete(id);
+      if (news) {
+        res.status(200).send("news Deleted");
       } else {
-        res.status(403).send("You have not acces to delete user");
+        res.status(404).send("news Not Found");
       }
-    } catch (error) {
-      res.status(500).send("Internal Server Error");
+    } else {
+      res.status(403).send("You have not acces to delete news");
     }
+
+  } catch (error) {
+    res.status(500).send("Internal Server Error");
   }
+}
+
+
+
+// --------------------------UPDATE NEWS--------------------------------------------
+
+
+export async function updateNews(req, res) {
+  try {
+    const { id } = req.params
+    const token = req.headers.authorization
+    const decoded = jwt.verify(token, PrivateKey)
+    if (decoded.role === 'admin') {
+      await News.findByIdAndUpdate(id, req.body)
+      res.status(200).send('News Updated')
+    } else {
+      res.status(403).send('You have not acces for updating')
+    }
+
+  } catch (error) {
+    res.status(500).send(error.message);
+
+  }
+
+}
+
 
 // --------------------------GET ALL News--------------------------------------------
 

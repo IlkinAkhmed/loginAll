@@ -7,7 +7,6 @@ import "./AllUsers.scss";
 function AllUsers() {
   const [input, setInput] = useState("");
   const [users, setUsers] = useState([]);
-  const [isFormOpen, setIsFormOpen] = useState(false);
   const [editUserId, setEditUserId] = useState(null);
   const [editUsername, setEditUsername] = useState("");
   const [editPassword, setEditPassword] = useState("");
@@ -26,6 +25,8 @@ function AllUsers() {
   useEffect(() => {
     fetchUsers();
   }, []);
+
+
 
   // Delete function
   const handleDelete = async (id) => {
@@ -69,8 +70,7 @@ function AllUsers() {
       fetchUsers();
       setEditPassword("");
       setEditUsername("");
-      setEditUserId(id === editUserId ? null : id);
-      setIsFormOpen(!isFormOpen);
+      setEditUserId(id);
     } catch (error) {
       console.error(error.message);
     }
@@ -133,6 +133,7 @@ function AllUsers() {
                 padding: "10px 0",
               }}
             >
+              {/*--------- EDIT FORM ---------*/}
               <form
                 onSubmit={(e) => handleUpdate(e, user._id)}
                 className={
@@ -142,8 +143,7 @@ function AllUsers() {
               >
                 <i
                   onClick={() => {
-                    setEditUserId(user._id === editUserId ? null : user._id),
-                    setIsFormOpen(!isFormOpen);
+                    setEditUserId(null)
                   }}
                   className="fa-solid fa-xmark"
                 ></i>
@@ -182,8 +182,7 @@ function AllUsers() {
                 </button>
                 <button
                   onClick={() => {
-                    setEditUserId(user._id === editUserId ? null : user._id);
-                    setIsFormOpen(!isFormOpen);
+                    setEditUserId(user._id);
                   }}
                 >
                   Edit
